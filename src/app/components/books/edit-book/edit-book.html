@@ -1,0 +1,96 @@
+<div class="card">
+    <div class="card-header">
+        Edit a book
+    </div>
+    <div class="card-body">
+         <div class="alert alert-danger mb-3" *ngIf="isError">
+            {{ errorMessage }}
+        </div>
+        <form *ngIf="!isLoading" [formGroup]="editBookForm" (ngSubmit)="submitForm()">
+            <div class="mb-3">
+                <label for="" class="form-label">Title</label>
+                <input type="text" name="" id="" 
+                    class="form-control" 
+                    formControlName="title"
+                    [class.is-invalid]="!editBookForm.get('title')?.valid && editBookForm.get('title')?.touched"
+                    >
+                    <div class="helper-block" *ngIf="!editBookForm.get('title')?.valid && editBookForm.get('title')?.touched">Book title is required and can't be longer than 255 characters</div>
+            </div>
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <label for="" class="form-label mb-0">Authors</label>
+                    <button type="button" class="btn btn-primary" (click)="addAuthor()">New author</button>
+                </div>
+                <div formArrayName="authors">
+                    <div *ngFor="let author of authors; let i=index" class="card mb-4" [formGroupName]="i">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Author {{i + 1}}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row mb-2">
+                                <label [for]="'name-' + i" class="col-sm-2 col-form-label">First name</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                        [id]="'name-' + i"
+                                        class="form-control"
+                                        formControlName="name"
+                                        [class.is-invalid]="! author.get('name')?.valid && author.get('name')?.touched">
+                                        <div class="helper-block" *ngIf="! author.get('name')?.valid && author.get('name')?.touched">First name is required and can't be longer than 255 characters</div>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-2">
+                                <label [for]="'surname-' + i" class="col-sm-2 col-form-label">Last name</label>
+                                <div class="col-sm-10">
+                                    <input type="text"
+                                        [id]="'surname-' + i"
+                                        class="form-control"
+                                        formControlName="surname"
+                                        [class.is-invalid]="! author.get('surname')?.valid && author.get('surname')?.touched">
+                                        <div class="helper-block" *ngIf="! author.get('surname')?.valid && author.get('surname')?.touched">Last name is required and can't be longer than 255 characters</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <button type="button" class="btn btn-danger" (click)="removeAuthor(i)">
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Description</label>
+                <input type="text" name="" id="" 
+                    class="form-control" 
+                    formControlName="short_description"
+                    >
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Pages count</label>
+                <input type="text" name="" id="" 
+                    class="form-control" 
+                    formControlName="pages"
+                    [class.is-invalid]="!editBookForm.get('pages')?.valid && editBookForm.get('pages')?.touched"
+                    >
+                    <div class="helper-block" *ngIf="!editBookForm.get('pages')?.valid && editBookForm.get('pages')?.touched">Pages count is required and has to be a positive number</div>
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">ISBN</label>
+                <input type="text" name="" id="" 
+                    class="form-control" 
+                    formControlName="isbn"
+                    [class.is-invalid]="(!editBookForm.get('isbn')?.valid && editBookForm.get('isbn')?.touched) && !editBookForm.get('isbn')?.pending"
+                    >
+                    <div class="helper-block" *ngIf="(!editBookForm.get('isbn')?.valid && editBookForm.get('isbn')?.touched) && !editBookForm.get('isbn')?.pending">ISBN is required and has to be valid and unique</div>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success" [disabled]="!editBookForm.valid">Save</button>
+            </div>
+        </form>
+        <div class="alert alert-info" *ngIf="isLoading">
+            Information is being uploaded to the server
+        </div>
+    </div>
+</div>

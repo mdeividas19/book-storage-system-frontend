@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="card-header">
+        Books list
+    </div>
+    <div class="card-body">
+        <div class="alert alert-danger mb-3" *ngIf="isError">
+           {{ errorMessage }}
+        </div>
+        <table class="table" *ngIf="!isLoading && !isError">
+            <thead>
+                <tr>
+                    <th>Nr.</th>
+                    <th>Title</th>
+                    <th>Authors</th>
+                    <th>Description</th>
+                    <th>Pages count</th>
+                    <th>ISBN</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let book of books; let i=index">
+                    <td>{{ i+1 }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>
+                        <span *ngFor="let author of book.authors; let last = last">
+                            {{ author.name }} {{ author.surname }}<ng-container *ngIf="!last">, </ng-container>
+                        </span>
+                    </td>
+                    <td>{{ book.short_description || '-' }}</td>
+                    <td>{{ book.pages }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" (click)="onEdit(book)" title="Edit book">Edit</button>
+                        <button class="btn btn-sm btn-danger" (click)="onDelete(book)" title="Delete book">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="alert alert-info" *ngIf="isLoading">
+            Data is being retrieved from the server
+        </div>
+    </div>
+</div>
