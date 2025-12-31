@@ -17,8 +17,26 @@
                     <th>ISBN</th>
                     <th>Actions</th>
                 </tr>
+                <tr>
+                    <th></th>
+                    <th>
+                        <input type="text" class="form-control" [(ngModel)]="filterTitle" (keyup)="filterBooks()" placeholder="Filter by title..." aria-label="Filter by title">
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <input type="text" class="form-control" [(ngModel)]="filterISBN" (keyup)="filterBooks()" placeholder="Filter by ISBN number..." aria-label="Filter by ISBN number">
+                    </th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
+                <tr *ngIf="books && books.length === 0">
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No books found
+                    </td>
+                </tr>
                 <tr *ngFor="let book of books; let i=index">
                     <td>{{ i+1 }}</td>
                     <td>{{ book.title }}</td>
