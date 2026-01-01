@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Book } from '../models/book';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs';
+import { AuthService } from './auth-service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class BooksService {
   private url = "http://127.0.0.1:8000/api/books";
   public books: Book[] = [];
 
-  constructor (private http: HttpClient) {}
+  constructor (private http: HttpClient, private authService: AuthService) {}
 
   public getBooks() {
     return this.http.get<Book[]>(this.url).pipe(
@@ -24,15 +25,27 @@ export class BooksService {
   }
 
   public addBook(book: Book) {
-    return this.http.post(this.url, book);
+    return this.http.post(this.url, book, {
+      headers:{
+        Authorization: "Bearer " + this.authService.accessToken
+      }
+    });
   }
 
   public updateBook(id: string, book: Book) {
-    return this.http.put(this.url + '/' + id, book);
+    return this.http.put(this.url + '/' + id, book, {
+      headers:{
+        Authorization: "Bearer " + this.authService.accessToken
+      }
+    });
   }
 
   public deleteBook(book: Book) {
-    return this.http.delete(this.url + '/' + book.id);
+    return this.http.delete(this.url + '/' + book.id, {
+      headers:{
+        Authorization: "Bearer " + this.authService.accessToken
+      }
+    });
   }
 
 }

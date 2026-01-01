@@ -1,13 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 ps-3">
-  <a class="navbar-brand" href="#">Books</a>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/" href="/">Books list</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="/new" href="/new">Add new book</a>
-      </li>
-    </ul>
-  </div>
+    <a class="navbar-brand" href="#">Books</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" routerLink="/">Books list</a>
+            </li>
+            <li class="nav-item active" *ngIf="isLoggedIn">
+                <a class="nav-link" routerLink="/new">Add new book</a>
+            </li>
+        </ul>
+    </div>
+    <a class="btn btn-info float-end me-3" *ngIf="!isLoggedIn" routerLink="/login">Login</a>
+    <a class="btn btn-warning float-end me-3" *ngIf="isLoggedIn" (click)="logout()">Logout</a>
 </nav>

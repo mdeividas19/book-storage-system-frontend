@@ -15,7 +15,7 @@
                     <th>Description</th>
                     <th>Pages count</th>
                     <th>ISBN</th>
-                    <th>Actions</th>
+                    <th *ngIf="isLoggedIn">Actions</th>
                 </tr>
                 <tr>
                     <th></th>
@@ -28,7 +28,7 @@
                     <th>
                         <input type="text" class="form-control" [(ngModel)]="filterISBN" (keyup)="filterBooks()" placeholder="Filter by ISBN number..." aria-label="Filter by ISBN number">
                     </th>
-                    <th></th>
+                    <th *ngIf="isLoggedIn"></th>
                 </tr>
             </thead>
             <tbody>
@@ -48,7 +48,7 @@
                     <td>{{ book.short_description || '-' }}</td>
                     <td>{{ book.pages }}</td>
                     <td>{{ book.isbn }}</td>
-                    <td>
+                    <td *ngIf="isLoggedIn">
                         <button class="btn btn-sm btn-primary me-2" (click)="onEdit(book)" title="Edit book">Edit</button>
                         <button class="btn btn-sm btn-danger" (click)="onDelete(book)" title="Delete book">Delete</button>
                     </td>

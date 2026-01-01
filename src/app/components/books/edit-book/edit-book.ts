@@ -80,7 +80,6 @@ export class EditBook {
     }
     this.isLoading = true;
     this.isError = false;
-    console.log(this.editBookForm.value);
     this.booksService.updateBook(this.bookId, this.editBookForm.value).subscribe({
       next:()=>{
         this.isLoading = false;

@@ -4,6 +4,7 @@ import { Book } from '../../../models/book';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth-service';
 
 @Component({
   selector: 'app-list-books',
@@ -21,7 +22,9 @@ export class ListBooks {
   public filterTitle = '';
   public filterISBN = '';
 
-  constructor (private booksService: BooksService, private router: Router) {
+  public isLoggedIn = false;
+
+  constructor (private booksService: BooksService, private authService: AuthService, private router: Router) {
     this.isLoading = true;
     this.booksService.getBooks().subscribe({
       next:(data)=> {      
@@ -35,6 +38,10 @@ export class ListBooks {
         this.errorMessage = "Error occured while loading data";
       }
     })
+    this.isLoggedIn = authService.accessToken !== '';
+    authService.onLoginStatusChanged.subscribe(()=>{
+      this.isLoggedIn = authService.accessToken !== '';
+    });
   }
 
   onEdit(book: Book): void {

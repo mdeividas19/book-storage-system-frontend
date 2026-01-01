@@ -1,0 +1,31 @@
+<div class="row mt-5">
+    <div class="col-md-6 offset-md-3 col-xs-12">
+        <div class="card">
+            <div class="card-header">{{ isLogin ? "Login" : "Register" }}</div>
+            <div class="card-body">
+                <div class="alert alert-danger mb-3" *ngIf="isError">
+                    {{ errorMessage }}
+                </div>
+                <form *ngIf="!isLoading" [formGroup]="loginForm" (ngSubmit)="submitForm()">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" name="email" id="email" class="form-control" formControlName="email" [class.is-invalid]="!loginForm.get('email')?.valid && loginForm.get('email')?.touched">
+                        <div class="helper-block" *ngIf="!loginForm.get('email')?.valid && loginForm.get('email')?.touched">Email is required and has to be valid</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" formControlName="password" [class.is-invalid]="!loginForm.get('password')?.valid && loginForm.get('password')?.touched">
+                        <div class="helper-block" *ngIf="!loginForm.get('password')?.valid && loginForm.get('password')?.touched">{{ isLogin ? "Password is required" : "Password is required and has to be at least 6 characters long" }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-success" [disabled]="!loginForm.valid">{{ isLogin ? "Login" : "Register"}}</button>
+                        <a class="btn btn-outline-secondary float-end" (click)="toggleMode()">{{ isLogin ? "Don't have an account?" : "Already have an account?"}}</a>
+                    </div>
+                </form>
+                <div class="alert alert-info" *ngIf="isLoading">
+                    {{ isLogin ? "Logging in" : "Registering"}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
