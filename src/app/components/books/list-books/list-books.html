@@ -1,62 +1,82 @@
-<div class="card">
-    <div class="card-header">
-        Books list
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white py-3">
+        <h5 class="mb-0 fw-semibold">
+            <i class="bi bi-list-ul me-2"></i>Books List
+        </h5>
     </div>
-    <div class="card-body">
-        <div class="alert alert-danger mb-3" *ngIf="isError">
-           {{ errorMessage }}
+    <div class="card-body p-0">
+        <div class="alert alert-danger m-3 d-flex align-items-center" *ngIf="isError" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>{{ errorMessage }}</div>
         </div>
-        <table class="table" *ngIf="!isLoading && !isError">
-            <thead>
-                <tr>
-                    <th>Nr.</th>
-                    <th>Title</th>
-                    <th>Authors</th>
-                    <th>Description</th>
-                    <th>Pages count</th>
-                    <th>ISBN</th>
-                    <th *ngIf="isLoggedIn">Actions</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th>
-                        <input type="text" class="form-control" [(ngModel)]="filterTitle" (keyup)="filterBooks()" placeholder="Filter by title..." aria-label="Filter by title">
-                    </th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>
-                        <input type="text" class="form-control" [(ngModel)]="filterISBN" (keyup)="filterBooks()" placeholder="Filter by ISBN number..." aria-label="Filter by ISBN number">
-                    </th>
-                    <th *ngIf="isLoggedIn"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngIf="books && books.length === 0">
-                    <td colspan="7" class="text-center text-muted py-4">
-                        No books found
-                    </td>
-                </tr>
-                <tr *ngFor="let book of books; let i=index">
-                    <td>{{ i+1 }}</td>
-                    <td>{{ book.title }}</td>
-                    <td>
-                        <span *ngFor="let author of book.authors; let last = last">
-                            {{ author.name }} {{ author.surname }}<ng-container *ngIf="!last">, </ng-container>
-                        </span>
-                    </td>
-                    <td>{{ book.short_description || '-' }}</td>
-                    <td>{{ book.pages }}</td>
-                    <td>{{ book.isbn }}</td>
-                    <td *ngIf="isLoggedIn">
-                        <button class="btn btn-sm btn-primary me-2" (click)="onEdit(book)" title="Edit book">Edit</button>
-                        <button class="btn btn-sm btn-danger" (click)="onDelete(book)" title="Delete book">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="alert alert-info" *ngIf="isLoading">
-            Data is being retrieved from the server
+        <div class="text-center py-5" *ngIf="isLoading">
+            <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="text-muted">Loading books from server...</p>
+        </div>
+        <div class="p-3 bg-light border-bottom " *ngIf="!isLoading && !isError">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label small text-muted mb-1">Filter by Title</label>
+                    <input type="text" class="form-control" [(ngModel)]="filterTitle" (keyup)="filterBooks()" placeholder="Search title..." aria-label="Filter by title">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small text-muted mb-1">Filter by ISBN</label>
+                    <input type="text" class="form-control" [(ngModel)]="filterISBN" (keyup)="filterBooks()" placeholder="Search ISBN..." aria-label="Filter by ISBN">
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive " *ngIf="!isLoading && !isError">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center" style="width: 60px;">#</th>
+                        <th>Title</th>
+                        <th>Authors</th>
+                        <th>Description</th>
+                        <th class="text-center" style="width: 100px;">Pages</th>
+                        <th style="width: 150px;">ISBN</th>
+                        <th *ngIf="isLoggedIn" class="text-center" style="width: 180px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="books && books.length === 0">
+                        <td [attr.colspan]="isLoggedIn ? 7 : 6" class="text-center py-5">
+                            <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                            <p class="text-muted mb-0">No books found</p>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let book of books; let i=index">
+                        <td class="text-center text-muted">{{ i+1 }}</td>
+                        <td class="fw-semibold">{{ book.title }}</td>
+                        <td>
+                            <span *ngFor="let author of book.authors; let last = last" class="text-muted">
+                                {{ author.name }} {{ author.surname }}<ng-container *ngIf="!last">, </ng-container>
+                            </span>
+                        </td>
+                        <td >
+                            <span class="text-muted">{{ book.short_description || '-' }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-light text-dark">{{ book.pages }}</span>
+                        </td>
+                        <td>
+                            <code class="text-muted small">{{ book.isbn }}</code>
+                        </td>
+                        <td *ngIf="isLoggedIn" class="text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-outline-primary" (click)="onEdit(book)" title="Edit book">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" (click)="onDelete(book)" title="Delete book">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

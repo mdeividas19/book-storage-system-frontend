@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators, AbstractControl } from '@angular/forms';
 import { BooksService } from '../../../services/books-service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-book',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './edit-book.html',
   styleUrl: './edit-book.css',
 })

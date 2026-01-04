@@ -1,0 +1,66 @@
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 0.375rem;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0.375rem;
+}
+
+.nav-link,
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        padding: 1rem 0;
+    }
+
+    .nav-item {
+        margin-bottom: 0.25rem;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        border-radius: 0.375rem;
+    }
+
+    .d-flex.flex-column {
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .d-flex.flex-column .btn {
+        width: 100%;
+    }
+}
+
+.btn-light:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: white;
+    color: white;
+}
+
+.navbar-brand:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.navbar-brand {
+    transition: all 0.2s ease-in-out;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: 2px solid rgba(255, 255, 255, 0.3);
+}

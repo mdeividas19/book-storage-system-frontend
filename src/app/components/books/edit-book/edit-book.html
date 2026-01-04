@@ -1,96 +1,126 @@
-<div class="card">
-    <div class="card-header">
-        Edit a book
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white py-3">
+        <h5 class="mb-0 fw-semibold">
+            <i class="bi bi-pencil me-2"></i>Edit Book
+        </h5>
     </div>
-    <div class="card-body">
-         <div class="alert alert-danger mb-3" *ngIf="isError">
-            {{ errorMessage }}
+    <div class="card-body p-4">
+        <div class="alert alert-danger d-flex align-items-center mb-4" *ngIf="isError" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>{{ errorMessage }}</div>
+        </div>
+        <div class="text-center py-5" *ngIf="isLoading">
+            <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="text-muted">Uploading information to the server...</p>
         </div>
         <form *ngIf="!isLoading" [formGroup]="editBookForm" (ngSubmit)="submitForm()">
-            <div class="mb-3">
-                <label for="" class="form-label">Title</label>
-                <input type="text" name="" id="" 
-                    class="form-control" 
-                    formControlName="title"
-                    [class.is-invalid]="!editBookForm.get('title')?.valid && editBookForm.get('title')?.touched"
-                    >
-                    <div class="helper-block" *ngIf="!editBookForm.get('title')?.valid && editBookForm.get('title')?.touched">Book title is required and can't be longer than 255 characters</div>
+            <div class="mb-4">
+                <label for="bookTitle" class="form-label fw-semibold">
+                    <i class="bi bi-journal-text me-1"></i>Title
+                    <span class="text-danger">*</span>
+                </label>
+                <input type="text" id="bookTitle" class="form-control" formControlName="title" placeholder="Enter book title"
+                    [class.is-invalid]="!editBookForm.get('title')?.valid && editBookForm.get('title')?.touched">
+                <div class="invalid-feedback" *ngIf="!editBookForm.get('title')?.valid && editBookForm.get('title')?.touched">
+                    <i class="bi bi-exclamation-circle me-1"></i>
+                    Book title is required and can't be longer than 255 characters
+                </div>
             </div>
-            <div class="mb-3">
+            <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <label for="" class="form-label mb-0">Authors</label>
-                    <button type="button" class="btn btn-primary" (click)="addAuthor()">New author</button>
+                    <label class="form-label fw-semibold mb-0">
+                        <i class="bi bi-people me-1"></i>Authors
+                        <span class="text-danger">*</span>
+                    </label>
+                    <button type="button" class="btn btn-outline-primary btn-sm" (click)="addAuthor()">
+                        <i class="bi bi-plus-circle me-1"></i>Add Author
+                    </button>
                 </div>
                 <div formArrayName="authors">
-                    <div *ngFor="let author of authors; let i=index" class="card mb-4" [formGroupName]="i">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">Author {{i + 1}}</h5>
+                    <div *ngFor="let author of authors; let i=index" class="card border shadow-sm mb-3" [formGroupName]="i">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
+                            <h6 class="mb-0 fw-semibold text-primary">
+                                <i class="bi bi-person-circle me-2"></i>Author {{i + 1}}
+                            </h6>
+                            <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeAuthor(i)" [disabled]="authors.length === 1" title="Remove author">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </div>
                         <div class="card-body">
-                            <div class="form-group row mb-2">
-                                <label [for]="'name-' + i" class="col-sm-2 col-form-label">First name</label>
-                                <div class="col-sm-10">
-                                    <input type="text"
-                                        [id]="'name-' + i"
-                                        class="form-control"
-                                        formControlName="name"
-                                        [class.is-invalid]="! author.get('name')?.valid && author.get('name')?.touched">
-                                        <div class="helper-block" *ngIf="! author.get('name')?.valid && author.get('name')?.touched">First name is required and can't be longer than 255 characters</div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label [for]="'name-' + i" class="form-label small fw-semibold">
+                                        First Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" [id]="'name-' + i" class="form-control" placeholder="Enter first name" formControlName="name"
+                                        [class.is-invalid]="!author.get('name')?.valid && author.get('name')?.touched">
+                                    <div class="invalid-feedback" *ngIf="!author.get('name')?.valid && author.get('name')?.touched">
+                                        First name is required and can't be longer than 255 characters
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row mb-2">
-                                <label [for]="'surname-' + i" class="col-sm-2 col-form-label">Last name</label>
-                                <div class="col-sm-10">
-                                    <input type="text"
-                                        [id]="'surname-' + i"
-                                        class="form-control"
-                                        formControlName="surname"
-                                        [class.is-invalid]="! author.get('surname')?.valid && author.get('surname')?.touched">
-                                        <div class="helper-block" *ngIf="! author.get('surname')?.valid && author.get('surname')?.touched">Last name is required and can't be longer than 255 characters</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-10">
-                                    <button type="button" class="btn btn-danger" (click)="removeAuthor(i)">
-                                        Remove
-                                    </button>
+                                <div class="col-md-6">
+                                    <label [for]="'surname-' + i" class="form-label small fw-semibold">
+                                        Last Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" [id]="'surname-' + i" class="form-control" placeholder="Enter last name" formControlName="surname"
+                                        [class.is-invalid]="!author.get('surname')?.valid && author.get('surname')?.touched">
+                                    <div class="invalid-feedback" *ngIf="!author.get('surname')?.valid && author.get('surname')?.touched">
+                                        Last name is required and can't be longer than 255 characters
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="" class="form-label">Description</label>
-                <input type="text" name="" id="" 
-                    class="form-control" 
-                    formControlName="short_description"
-                    >
+            <div class="mb-4">
+                <label for="bookDescription" class="form-label fw-semibold">
+                    <i class="bi bi-card-text me-1"></i>Description
+                </label>
+                <textarea id="bookDescription" class="form-control" rows="3" formControlName="short_description" placeholder="Enter a brief description of the book"></textarea>
             </div>
-            <div class="mb-3">
-                <label for="" class="form-label">Pages count</label>
-                <input type="text" name="" id="" 
-                    class="form-control" 
-                    formControlName="pages"
-                    [class.is-invalid]="!editBookForm.get('pages')?.valid && editBookForm.get('pages')?.touched"
-                    >
-                    <div class="helper-block" *ngIf="!editBookForm.get('pages')?.valid && editBookForm.get('pages')?.touched">Pages count is required and has to be a positive number</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label for="bookPages" class="form-label fw-semibold">
+                        <i class="bi bi-file-earmark-text me-1"></i>Pages Count
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input type="number" id="bookPages" class="form-control" formControlName="pages" placeholder="e.g., 350" min="1"
+                        [class.is-invalid]="!editBookForm.get('pages')?.valid && editBookForm.get('pages')?.touched">
+                    <div class="invalid-feedback" *ngIf="!editBookForm.get('pages')?.valid && editBookForm.get('pages')?.touched">
+                        <i class="bi bi-exclamation-circle me-1"></i>
+                        Pages count is required and has to be a positive number
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="bookISBN" class="form-label fw-semibold">
+                        <i class="bi bi-upc-scan me-1"></i>ISBN
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="bookISBN" class="form-control" formControlName="isbn" placeholder="e.g., 978-3-16-148410-0"
+                        [class.is-invalid]="(!editBookForm.get('isbn')?.valid && editBookForm.get('isbn')?.touched) && !editBookForm.get('isbn')?.pending">
+                    <div class="invalid-feedback" *ngIf="(!editBookForm.get('isbn')?.valid && editBookForm.get('isbn')?.touched) && !editBookForm.get('isbn')?.pending">
+                        <i class="bi bi-exclamation-circle me-1"></i>
+                        ISBN is required and has to be valid and unique
+                    </div>
+                    <div class="form-text" *ngIf="editBookForm.get('isbn')?.pending">
+                        <div class="spinner-border spinner-border-sm me-1" role="status">
+                            <span class="visually-hidden">Validating...</span>
+                        </div>
+                        Validating ISBN...
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="" class="form-label">ISBN</label>
-                <input type="text" name="" id="" 
-                    class="form-control" 
-                    formControlName="isbn"
-                    [class.is-invalid]="(!editBookForm.get('isbn')?.valid && editBookForm.get('isbn')?.touched) && !editBookForm.get('isbn')?.pending"
-                    >
-                    <div class="helper-block" *ngIf="(!editBookForm.get('isbn')?.valid && editBookForm.get('isbn')?.touched) && !editBookForm.get('isbn')?.pending">ISBN is required and has to be valid and unique</div>
-            </div>
-            <div>
-                <button type="submit" class="btn btn-success" [disabled]="!editBookForm.valid">Save</button>
+            <div class="d-flex gap-2 pt-3 border-top">
+                <button type="submit" class="btn btn-primary px-4" [disabled]="!editBookForm.valid">
+                    <i class="bi bi-save me-2"></i>Save Changes
+                </button>
+                <button type="button" class="btn btn-outline-secondary px-4" routerLink="/">
+                    <i class="bi bi-x-circle me-2"></i>Cancel
+                </button>
             </div>
         </form>
-        <div class="alert alert-info" *ngIf="isLoading">
-            Information is being uploaded to the server
-        </div>
     </div>
 </div>

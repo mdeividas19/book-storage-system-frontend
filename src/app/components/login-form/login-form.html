@@ -1,29 +1,81 @@
-<div class="row mt-5">
-    <div class="col-md-6 offset-md-3 col-xs-12">
-        <div class="card">
-            <div class="card-header">{{ isLogin ? "Login" : "Register" }}</div>
-            <div class="card-body">
-                <div class="alert alert-danger mb-3" *ngIf="isError">
-                    {{ errorMessage }}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-white py-4 text-center" [ngClass]="isLogin ? 'bg-primary' : 'bg-success'">
+                    <i class="bi fs-1 mb-2 d-block" [ngClass]="isLogin ? 'bi-box-arrow-in-right' : 'bi-person-plus'"></i>
+                    <h4 class="mb-0 fw-semibold">{{ isLogin ? "Welcome Back" : "Create Account" }}</h4>
+                    <p class="mb-0 mt-1 opacity-75 small">
+                        {{ isLogin ? "Login to your account" : "Register for a new account" }}
+                    </p>
                 </div>
-                <form *ngIf="!isLoading" [formGroup]="loginForm" (ngSubmit)="submitForm()">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" name="email" id="email" class="form-control" formControlName="email" [class.is-invalid]="!loginForm.get('email')?.valid && loginForm.get('email')?.touched">
-                        <div class="helper-block" *ngIf="!loginForm.get('email')?.valid && loginForm.get('email')?.touched">Email is required and has to be valid</div>
+                <div class="card-body p-4">
+                    <div class="alert alert-danger d-flex align-items-start mb-4" *ngIf="isError" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2 mt-1"></i>
+                        <div>{{ errorMessage }}</div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password" id="password" class="form-control" formControlName="password" [class.is-invalid]="!loginForm.get('password')?.valid && loginForm.get('password')?.touched">
-                        <div class="helper-block" *ngIf="!loginForm.get('password')?.valid && loginForm.get('password')?.touched">{{ isLogin ? "Password is required" : "Password is required and has to be at least 6 characters long" }}</div>
+                    <div class="text-center py-4" *ngIf="isLoading">
+                        <div class="spinner-border mb-3" [ngClass]="isLogin ? 'text-primary' : 'text-success'" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="text-muted mb-0">
+                            {{ isLogin ? "Logging you in..." : "Creating your account..." }}
+                        </p>
                     </div>
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-success" [disabled]="!loginForm.valid">{{ isLogin ? "Login" : "Register"}}</button>
-                        <a class="btn btn-outline-secondary float-end" (click)="toggleMode()">{{ isLogin ? "Don't have an account?" : "Already have an account?"}}</a>
-                    </div>
-                </form>
-                <div class="alert alert-info" *ngIf="isLoading">
-                    {{ isLogin ? "Logging in" : "Registering"}}
+                    <form *ngIf="!isLoading" [formGroup]="loginForm" (ngSubmit)="submitForm()">
+                        <div class="mb-4">
+                            <label for="email" class="form-label fw-semibold">
+                                <i class="bi bi-envelope me-1"></i>Email Address
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="email" id="email" class="form-control form-control-lg" formControlName="email" placeholder="your.email@example.com"
+                                [class.is-invalid]="!loginForm.get('email')?.valid && loginForm.get('email')?.touched"
+                                autocomplete="email">
+                            <div class="invalid-feedback" *ngIf="!loginForm.get('email')?.valid && loginForm.get('email')?.touched">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                Email is required and has to be valid
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-semibold">
+                                <i class="bi bi-lock me-1"></i>Password
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" id="password" class="form-control form-control-lg" formControlName="password"
+                                [placeholder]="isLogin ? 'Enter your password' : 'Create a password'"
+                                [class.is-invalid]="!loginForm.get('password')?.valid && loginForm.get('password')?.touched"
+                                [autocomplete]="isLogin ? 'current-password' : 'new-password'">
+                            <div class="invalid-feedback" *ngIf="!loginForm.get('password')?.valid && loginForm.get('password')?.touched">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ isLogin ? "Password is required" : "Password is required and has to be at least 6 characters long" }}
+                            </div>
+                            <div class="form-text" *ngIf="!isLogin">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Password must be at least 6 characters
+                            </div>
+                        </div>
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-lg" [ngClass]="isLogin ? 'btn-primary' : 'btn-success'" [disabled]="!loginForm.valid">
+                                <i class="bi me-2" [ngClass]="isLogin ? 'bi-box-arrow-in-right' : 'bi-person-plus'"></i>
+                                {{ isLogin ? "Login" : "Create Account" }}
+                            </button>
+                        </div>
+                        <div class="position-relative my-4">
+                            <hr class="text-muted">
+                            <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">
+                                OR
+                            </span>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-muted mb-2 small">
+                                {{ isLogin ? "Don't have an account?" : "Already have an account?" }}
+                            </p>
+                            <button type="button" class="btn btn-outline-secondary btn-sm px-4" (click)="toggleMode()">
+                                <i class="bi me-1" [ngClass]="isLogin ? 'bi-person-plus' : 'bi-box-arrow-in-right'"></i>
+                                {{ isLogin ? "Create Account" : "Login Instead" }}
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
